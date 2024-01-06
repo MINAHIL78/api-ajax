@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System API</title>
+</head>
+<body>
+
+<h1>Hospital Management System API</h1>
+
+<button onclick="getAllPatients()">Get All Patients</button>
+
+<div id="patientsList"></div>
+
+<script>
+    function getAllPatients() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var patients = JSON.parse(xhr.responseText);
+                    displayPatients(patients);
+                } else {
+                    console.error("Error fetching patients:", xhr.status, xhr.statusText);
+                }
+            }
+        };
+
+        xhr.open("GET", "api.php", true);
+        xhr.send();
+    }
+
+    function displayPatients(patients) {
+        var patientsList = document.getElementById("patientsList");
+        patientsList.innerHTML = "<h2>All Patients</h2>";
+
+        if (patients.length === 0) {
+            patientsList.innerHTML += "<p>No patients available.</p>";
+        } else {
+            patientsList.innerHTML += "<ul>";
+            patients.forEach(function (patient) {
+                patientsList.innerHTML += "<li>" + patient.name + " (Age: " + patient.age + ")</li>";
+            });
+            patientsList.innerHTML += "</ul>";
+        }
+    }
+</script>
+
+</body>
+</html>
